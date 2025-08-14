@@ -20,20 +20,182 @@ RUN <<EOT
   pip install --root-user-action ignore tox
 EOT
 FROM scratch
-ARG VER=3.13
+ARG ARCH=x86_64 OS=linux-musl VER=3.13
+ENV PYTHONHOME=/
 COPY --from=build /tmp /usr
 COPY --from=build \
-  /lib/ld-musl-x86_64.so.1 \
+  /lib/ld-musl-${ARCH}.so.1 \
   /usr/lib/libcrypto.so.3 \
   /usr/lib/libssl.so.3 \
   /usr/lib/libz.so.1 \
   /usr/local/lib/libpython${VER}.so.1.0 \
   /lib
 COPY --from=build \
-  --exclude=**/*-*.dist-info \
-  --exclude=**/*.txt \
-  --exclude=**/pip* \
-  /usr/local/lib/python${VER} \
+  /usr/local/lib/python${VER}/__future__.py \
+  /usr/local/lib/python${VER}/_colorize.py \
+  /usr/local/lib/python${VER}/_compat_pickle.py \
+  /usr/local/lib/python${VER}/_markupbase.py \
+  /usr/local/lib/python${VER}/_opcode_metadata.py \
+  /usr/local/lib/python${VER}/_pydatetime.py \
+  /usr/local/lib/python${VER}/_pydecimal.py \
+  /usr/local/lib/python${VER}/_sysconfigdata__linux_${ARCH}-${OS}.py \
+  /usr/local/lib/python${VER}/_weakrefset.py \
+  /usr/local/lib/python${VER}/argparse.py \
+  /usr/local/lib/python${VER}/ast.py \
+  /usr/local/lib/python${VER}/base64.py \
+  /usr/local/lib/python${VER}/bisect.py \
+  /usr/local/lib/python${VER}/calendar.py \
+  /usr/local/lib/python${VER}/colorsys.py \
+  /usr/local/lib/python${VER}/compileall.py \
+  /usr/local/lib/python${VER}/configparser.py \
+  /usr/local/lib/python${VER}/contextlib.py \
+  /usr/local/lib/python${VER}/contextvars.py \
+  /usr/local/lib/python${VER}/copy.py \
+  /usr/local/lib/python${VER}/copyreg.py \
+  /usr/local/lib/python${VER}/csv.py \
+  /usr/local/lib/python${VER}/dataclasses.py \
+  /usr/local/lib/python${VER}/datetime.py \
+  /usr/local/lib/python${VER}/decimal.py \
+  /usr/local/lib/python${VER}/difflib.py \
+  /usr/local/lib/python${VER}/dis.py \
+  /usr/local/lib/python${VER}/enum.py \
+  /usr/local/lib/python${VER}/filecmp.py \
+  /usr/local/lib/python${VER}/fnmatch.py \
+  /usr/local/lib/python${VER}/fractions.py \
+  /usr/local/lib/python${VER}/functools.py \
+  /usr/local/lib/python${VER}/getpass.py \
+  /usr/local/lib/python${VER}/gettext.py \
+  /usr/local/lib/python${VER}/glob.py \
+  /usr/local/lib/python${VER}/hashlib.py \
+  /usr/local/lib/python${VER}/heapq.py \
+  /usr/local/lib/python${VER}/hmac.py \
+  /usr/local/lib/python${VER}/inspect.py \
+  /usr/local/lib/python${VER}/ipaddress.py \
+  /usr/local/lib/python${VER}/keyword.py \
+  /usr/local/lib/python${VER}/lib-dynload/_blake2.cpython-*-${ARCH}-${OS}.so \
+  /usr/local/lib/python${VER}/lib-dynload/_contextvars.cpython-*-${ARCH}-${OS}.so \
+  /usr/local/lib/python${VER}/lib-dynload/_csv.cpython-*-${ARCH}-${OS}.so \
+  /usr/local/lib/python${VER}/lib-dynload/_hashlib.cpython-*-${ARCH}-${OS}.so \
+  /usr/local/lib/python${VER}/lib-dynload/_opcode.cpython-*-${ARCH}-${OS}.so \
+  /usr/local/lib/python${VER}/lib-dynload/_posixsubprocess.cpython-*-${ARCH}-${OS}.so \
+  /usr/local/lib/python${VER}/lib-dynload/_random.cpython-*-${ARCH}-${OS}.so \
+  /usr/local/lib/python${VER}/lib-dynload/_socket.cpython-*-${ARCH}-${OS}.so \
+  /usr/local/lib/python${VER}/lib-dynload/_ssl.cpython-*-${ARCH}-${OS}.so \
+  /usr/local/lib/python${VER}/lib-dynload/_struct.cpython-*-${ARCH}-${OS}.so \
+  /usr/local/lib/python${VER}/lib-dynload/array.cpython-*-${ARCH}-${OS}.so \
+  /usr/local/lib/python${VER}/lib-dynload/binascii.cpython-*-${ARCH}-${OS}.so \
+  /usr/local/lib/python${VER}/lib-dynload/fcntl.cpython-*-${ARCH}-${OS}.so \
+  /usr/local/lib/python${VER}/lib-dynload/math.cpython-*-${ARCH}-${OS}.so \
+  /usr/local/lib/python${VER}/lib-dynload/mmap.cpython-*-${ARCH}-${OS}.so \
+  /usr/local/lib/python${VER}/lib-dynload/pyexpat.cpython-*-${ARCH}-${OS}.so \
+  /usr/local/lib/python${VER}/lib-dynload/select.cpython-*-${ARCH}-${OS}.so \
+  /usr/local/lib/python${VER}/lib-dynload/unicodedata.cpython-*-${ARCH}-${OS}.so \
+  /usr/local/lib/python${VER}/lib-dynload/zlib.cpython-*-${ARCH}-${OS}.so \
+  /usr/local/lib/python${VER}/linecache.py \
+  /usr/local/lib/python${VER}/locale.py \
+  /usr/local/lib/python${VER}/mimetypes.py \
+  /usr/local/lib/python${VER}/numbers.py \
+  /usr/local/lib/python${VER}/opcode.py \
+  /usr/local/lib/python${VER}/operator.py \
+  /usr/local/lib/python${VER}/optparse.py \
+  /usr/local/lib/python${VER}/pickle.py \
+  /usr/local/lib/python${VER}/pkgutil.py \
+  /usr/local/lib/python${VER}/platform.py \
+  /usr/local/lib/python${VER}/py_compile.py \
+  /usr/local/lib/python${VER}/queue.py \
+  /usr/local/lib/python${VER}/quopri.py \
+  /usr/local/lib/python${VER}/random.py \
+  /usr/local/lib/python${VER}/reprlib.py \
+  /usr/local/lib/python${VER}/selectors.py \
+  /usr/local/lib/python${VER}/shlex.py \
+  /usr/local/lib/python${VER}/shutil.py \
+  /usr/local/lib/python${VER}/signal.py \
+  /usr/local/lib/python${VER}/socket.py \
+  /usr/local/lib/python${VER}/socketserver.py \
+  /usr/local/lib/python${VER}/ssl.py \
+  /usr/local/lib/python${VER}/string.py \
+  /usr/local/lib/python${VER}/stringprep.py \
+  /usr/local/lib/python${VER}/struct.py \
+  /usr/local/lib/python${VER}/subprocess.py \
+  /usr/local/lib/python${VER}/tarfile.py \
+  /usr/local/lib/python${VER}/tempfile.py \
+  /usr/local/lib/python${VER}/textwrap.py \
+  /usr/local/lib/python${VER}/threading.py \
+  /usr/local/lib/python${VER}/token.py \
+  /usr/local/lib/python${VER}/tokenize.py \
+  /usr/local/lib/python${VER}/traceback.py \
+  /usr/local/lib/python${VER}/types.py \
+  /usr/local/lib/python${VER}/typing.py \
+  /usr/local/lib/python${VER}/uuid.py \
+  /usr/local/lib/python${VER}/warnings.py \
+  /usr/local/lib/python${VER}/weakref.py \
   /lib/python${VER}
+COPY --from=build /usr/local/lib/python${VER}/asyncio /lib/python${VER}/asyncio
+COPY --from=build \
+  /usr/local/lib/python${VER}/collections \
+  /lib/python${VER}/collections
+COPY --from=build \
+  /usr/local/lib/python${VER}/concurrent \
+  /lib/python${VER}/concurrent
+COPY --from=build /usr/local/lib/python${VER}/email /lib/python${VER}/email
+COPY --from=build \
+  /usr/local/lib/python${VER}/encodings \
+  /lib/python${VER}/encodings
+COPY --from=build /usr/local/lib/python${VER}/html /lib/python${VER}/html
+COPY --from=build /usr/local/lib/python${VER}/http /lib/python${VER}/http
+COPY --from=build \
+  /usr/local/lib/python${VER}/importlib \
+  /lib/python${VER}/importlib
+COPY --from=build /usr/local/lib/python${VER}/json /lib/python${VER}/json
+COPY --from=build /usr/local/lib/python${VER}/logging /lib/python${VER}/logging
+COPY --from=build \
+  /usr/local/lib/python${VER}/multiprocessing \
+  /lib/python${VER}/multiprocessing
+COPY --from=build /usr/local/lib/python${VER}/pathlib /lib/python${VER}/pathlib
+COPY --from=build /usr/local/lib/python${VER}/re /lib/python${VER}/re
+COPY --from=build \
+  /usr/local/lib/python${VER}/site-packages/cachetools \
+  /lib/python${VER}/cachetools
+COPY --from=build \
+  /usr/local/lib/python${VER}/site-packages/chardet \
+  /lib/python${VER}/chardet
+COPY --from=build \
+  /usr/local/lib/python${VER}/site-packages/colorama \
+  /lib/python${VER}/colorama
+COPY --from=build \
+  /usr/local/lib/python${VER}/site-packages/distlib \
+  /lib/python${VER}/distlib
+COPY --from=build \
+  /usr/local/lib/python${VER}/site-packages/filelock \
+  /lib/python${VER}/filelock
+COPY --from=build \
+  /usr/local/lib/python${VER}/site-packages/packaging \
+  /lib/python${VER}/packaging
+COPY --from=build \
+  /usr/local/lib/python${VER}/site-packages/platformdirs \
+  /lib/python${VER}/platformdirs
+COPY --from=build \
+  /usr/local/lib/python${VER}/site-packages/pluggy \
+  /lib/python${VER}/pluggy
+COPY --from=build \
+  /usr/local/lib/python${VER}/site-packages/pyproject_api \
+  /lib/python${VER}/pyproject_api
+COPY --from=build \
+  /usr/local/lib/python${VER}/site-packages/tox \
+  /lib/python${VER}/tox
+COPY --from=build \
+  /usr/local/lib/python${VER}/site-packages/virtualenv \
+  /lib/python${VER}/virtualenv
+COPY --from=build \
+  /usr/local/lib/python${VER}/site-packages/virtualenv-*.dist-info/entry_points.txt \
+  /lib/python${VER}/virtualenv.dist-info/entry_points.txt
+COPY --from=build \
+  /usr/local/lib/python${VER}/sysconfig \
+  /lib/python${VER}/sysconfig
+COPY --from=build /usr/local/lib/python${VER}/tomllib /lib/python${VER}/tomllib
+COPY --from=build /usr/local/lib/python${VER}/urllib /lib/python${VER}/urllib
+COPY --from=build /usr/local/lib/python${VER}/xml /lib/python${VER}/xml
+COPY --from=build /usr/local/lib/python${VER}/xmlrpc /lib/python${VER}/xmlrpc
+COPY --from=build /usr/local/lib/python${VER}/zipfile /lib/python${VER}/zipfile
 COPY --from=build /usr/local/bin/python${VER} /usr/local/bin/tox /bin
 ENTRYPOINT ["/bin/tox"]
