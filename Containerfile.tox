@@ -1,0 +1,39 @@
+# Copyright (C) 2025 Eduardo Santos <eduardo.experimental@gmail.com>
+#
+# This file is part of edcsnt/img.
+#
+# edcsnt/img is free software: you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the
+# Free Software Foundation, either version 3 of the License, or (at your
+# option) any later version.
+#
+# edcsnt/img is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with edcsnt/img. If not, see <https://www.gnu.org/licenses/>.
+FROM docker.io/library/python:alpine AS build
+RUN <<EOT
+  ln -s / /tmp/local
+  pip install --root-user-action ignore tox
+EOT
+FROM scratch
+ARG VER=3.13
+COPY --from=build /tmp /usr
+COPY --from=build \
+  /lib/ld-musl-x86_64.so.1 \
+  /usr/lib/libcrypto.so.3 \
+  /usr/lib/libssl.so.3 \
+  /usr/lib/libz.so.1 \
+  /usr/local/lib/libpython${VER}.so.1.0 \
+  /lib
+COPY --from=build \
+  --exclude=**/*-*.dist-info \
+  --exclude=**/*.txt \
+  --exclude=**/pip* \
+  /usr/local/lib/python${VER} \
+  /lib/python${VER}
+COPY --from=build /usr/local/bin/python${VER} /usr/local/bin/tox /bin
+ENTRYPOINT ["/bin/tox"]
