@@ -21,6 +21,7 @@ on:
     branches:
       - main
     paths:
+      - .github/workflows/tox.yaml
       - Containerfile.tox
   workflow_dispatch: null
 permissions: {}
