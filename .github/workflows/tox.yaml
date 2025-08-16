@@ -54,4 +54,4 @@ jobs:
             --remove-signatures \
             containers-storage:docker.io/edcsnt/${{ github.workflow }}:latest \
             docker://docker.io/edcsnt/${{ github.workflow }}:latest
-    timeout-minutes: 5
+    timeout-minutes: 1
