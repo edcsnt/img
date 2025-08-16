@@ -36,6 +36,8 @@ jobs:
       - ubuntu-latest
     steps:
       - run: |
+          curl -Ovvvv \
+            https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/${{ github.ref_name }}/Containerfile.${{ github.workflow }}
           sudo apt-get --no-install-recommends -yU install buildah
           buildah --log-level trace build \
             -f Containerfile.${{ github.workflow }} \
