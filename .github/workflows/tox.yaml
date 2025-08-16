@@ -41,7 +41,7 @@ jobs:
           # https://github.com/containers/buildah/issues/5474
           curl -o buildah.deb -vvvv \
             http://azure.archive.ubuntu.com/ubuntu/pool/universe/g/golang-github-containers-buildah/buildah_1.35.3+ds1-3_amd64.deb
-          apt-get --no-install-recommends -yU install ./buildah.deb
+          sudo apt-get --no-install-recommends -yU install ./buildah.deb
           buildah --log-level trace build \
             -f Containerfile.${{ github.workflow }} \
             --no-hostname \
