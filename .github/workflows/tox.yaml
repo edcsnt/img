@@ -46,10 +46,10 @@ jobs:
             --squash \
             -t \
             containers-storage:docker.io/edcsnt/${{ github.workflow }}:latest
-          buildah push \
+          buildah --log-level trace push \
             --compression-format zstd:chunked \
             --compression-level 20 \
-            --creds edcsnt:${{ secrets.token }}
+            --creds edcsnt:${{ secrets.token }} \
             --remove-signatures \
             containers-storage:docker.io/edcsnt/${{ github.workflow }}:latest \
             docker://docker.io/edcsnt/${{ github.workflow }}:latest
