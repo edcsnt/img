@@ -36,7 +36,7 @@ jobs:
       - ubuntu-latest
     steps:
       - run: |
-          apt --no-install-recommends -yU install buildah
+          sudo apt-get --no-install-recommends -yU install buildah
           buildah --log-level trace build \
             -f Containerfile.${{ github.workflow }} \
             --no-hostname \
