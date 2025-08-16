@@ -1,0 +1,54 @@
+---
+# Copyright (C) 2025 Eduardo Santos <eduardo.experimental@gmail.com>
+#
+# This file is part of edcsnt/img.
+#
+# edcsnt/img is free software: you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the
+# Free Software Foundation, either version 3 of the License, or (at your
+# option) any later version.
+#
+# edcsnt/img is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with edcsnt/img. If not, see <https://www.gnu.org/licenses/>.
+name: tox
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - Containerfile.tox
+permissions: {}
+defaults:
+  run:
+    shell: sh
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+jobs:
+  ${{ github.workflow }}:
+    runs-on:
+      - ubuntu-latest
+    steps:
+      - run: |
+          apt --no-install-recommends -yU install buildah
+          buildah --log-level trace build \
+            -f Containerfile.${{ github.workflow }} \
+            --no-hostname \
+            --no-hosts \
+            --omit-history \
+            --squash \
+            -t \
+            containers-storage:docker.io/edcsnt/${{ github.workflow }}:latest
+          buildah --log-level trace push \
+            --compression-format zstd:chunked \
+            --compression-level 20 \
+            --creds edcsnt:${{ secrets.token }}
+            --remove-signatures \
+            containers-storage:docker.io/edcsnt/${{ github.workflow }}:latest \
+            docker://docker.io/edcsnt/${{ github.workflow }}:latest
+    timeout-minutes: 5

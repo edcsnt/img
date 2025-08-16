@@ -17,7 +17,7 @@
 FROM docker.io/library/python:alpine AS build
 RUN <<EOT
   ln -s / /tmp/local
-  pip install --root-user-action ignore tox
+  pip -vvv install --root-user-action ignore tox
 EOT
 FROM scratch
 ARG ARCH=x86_64 OS=linux-musl VER=3.13
