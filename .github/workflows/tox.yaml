@@ -47,7 +47,7 @@ jobs:
             -t \
             containers-storage:docker.io/edcsnt/${{ github.workflow }}:latest
           buildah --log-level trace push \
-            --compression-format zstd:chunked \
+            --compression-format zstd \
             --compression-level 20 \
             --creds edcsnt:${{ secrets.token }} \
             --remove-signatures \
