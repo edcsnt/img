@@ -15,8 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with edcsnt/img. If not, see <https://www.gnu.org/licenses/>.
 FROM docker.io/library/python:alpine AS build
-# TODO(edcsnt): https://github.com/containers/buildah/issues/5474
-RUN ln -s / /tmp/local && pip -vvv install --root-user-action ignore tox
+# TODO(edcsnt): Switch over to a here-document once
+# https://github.com/containers/buildah/issues/5474 is fixed downstream.
+RUN ln -s / /tmp/local \
+  && pip -vvv install --root-user-action ignore tox==4.28.4
 FROM scratch
 ARG ARCH=x86_64 OS=linux-musl VER=3.13
 ENV PYTHONHOME=/
@@ -27,7 +29,7 @@ COPY --from=build \
   /usr/lib/libssl.so.3 \
   /usr/lib/libz.so.1 \
   /usr/local/lib/libpython${VER}.so.1.0 \
-  /lib
+  /lib/
 COPY --from=build \
   /usr/local/lib/python${VER}/__future__.py \
   /usr/local/lib/python${VER}/_colorize.py \
@@ -127,7 +129,7 @@ COPY --from=build \
   /usr/local/lib/python${VER}/uuid.py \
   /usr/local/lib/python${VER}/warnings.py \
   /usr/local/lib/python${VER}/weakref.py \
-  /lib/python${VER}
+  /lib/python${VER}/
 COPY --from=build /usr/local/lib/python${VER}/asyncio /lib/python${VER}/asyncio
 COPY --from=build \
   /usr/local/lib/python${VER}/collections \
@@ -195,5 +197,5 @@ COPY --from=build /usr/local/lib/python${VER}/urllib /lib/python${VER}/urllib
 COPY --from=build /usr/local/lib/python${VER}/xml /lib/python${VER}/xml
 COPY --from=build /usr/local/lib/python${VER}/xmlrpc /lib/python${VER}/xmlrpc
 COPY --from=build /usr/local/lib/python${VER}/zipfile /lib/python${VER}/zipfile
-COPY --from=build /usr/local/bin/python${VER} /usr/local/bin/tox /bin
+COPY --from=build /usr/local/bin/python${VER} /usr/local/bin/tox /bin/
 ENTRYPOINT ["/bin/tox"]
