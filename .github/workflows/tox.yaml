@@ -46,7 +46,7 @@ jobs:
             --squash \
             -t \
             containers-storage:docker.io/edcsnt/${{ github.workflow }}:latest
-          buildah --log-level trace push \
+          buildah push \
             --compression-format zstd:chunked \
             --compression-level 20 \
             --creds edcsnt:${{ secrets.token }}
