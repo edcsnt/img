@@ -22,6 +22,7 @@ on:
       - main
     paths:
       - Containerfile.tox
+  workflow_dispatch: null
 permissions: {}
 defaults:
   run:
