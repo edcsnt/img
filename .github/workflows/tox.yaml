@@ -31,7 +31,7 @@ concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: true
 jobs:
-  "${{ github.workflow }}":
+  tox:
     runs-on:
       - ubuntu-latest
     steps:
