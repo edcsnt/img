@@ -50,7 +50,7 @@ jobs:
           buildah --log-level trace push \
             --compression-format zstd \
             --compression-level 20 \
-            --creds edcsnt:${{ secrets.token }} \
+            --creds edcsnt:${{ secrets.TOKEN }} \
             --remove-signatures \
             containers-storage:docker.io/edcsnt/${{ github.workflow }}:latest \
             docker://docker.io/edcsnt/${{ github.workflow }}:latest
