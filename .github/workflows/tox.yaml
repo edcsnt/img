@@ -37,7 +37,8 @@ jobs:
       - ubuntu-latest
     steps:
       # TODO(edcsnt): Replace docker-login(1) and docker buildx build
-      # with buildah-build(1) once Ubuntu 26.04 LTS is released.
+      # with buildah-build(1) and buildah-push(1) once Ubuntu 26.04 LTS
+      # is released.
       # yamllint disable rule:line-length
       - run: |
           curl -O \
@@ -45,14 +46,9 @@ jobs:
           docker login -u ${{ secrets.USER }} -p ${{ secrets.PASS }}
           docker buildx build \
           -f Containerfile \
+          --push \
           -t \
           docker.io/${{ github.repository_owner }}/${{ github.workflow }}:latest \
           .
-          buildah push \
-          --compression-format gzip \
-          --compression-level 9 \
-          --creds ${{ secrets.USER }}:${{ secrets.PASS }} \
-          --remove-signatures \
-          docker.io/${{ github.repository_owner }}/${{ github.workflow }}:latest
       # yamllint enable rule:line-length
     timeout-minutes: 1
