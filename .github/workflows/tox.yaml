@@ -16,14 +16,14 @@
 # You should have received a copy of the GNU General Public License
 # along with edcsnt/img. If not, see <https://www.gnu.org/licenses/>.
 name: tox
-on:
+on:  # yamllint disable-line rule:truthy
   push:
     branches:
       - main
     paths:
       - .github/workflows/tox.yaml
-      - Containerfile.tox
-  workflow_dispatch: null
+      - tox/**
+  workflow_dispatch: {}
 permissions: {}
 defaults:
   run:
@@ -36,22 +36,22 @@ jobs:
     runs-on:
       - ubuntu-latest
     steps:
+      # yamllint disable rule:line-length
       - run: |
-          curl -Ovvvv \
-            https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/${{ github.ref_name }}/Containerfile.${{ github.workflow }}
-          buildah --log-level trace build \
-            -f Containerfile.${{ github.workflow }} \
-            --no-hostname \
-            --no-hosts \
-            --omit-history \
-            --squash \
-            -t \
-            containers-storage:docker.io/edcsnt/${{ github.workflow }}:latest
-          buildah --log-level trace push \
-            --compression-format zstd \
-            --compression-level 20 \
-            --creds edcsnt:${{ secrets.TOKEN }} \
-            --remove-signatures \
-            containers-storage:docker.io/edcsnt/${{ github.workflow }}:latest \
-            docker://docker.io/edcsnt/${{ github.workflow }}:latest
+          curl -O \
+          https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/${{ github.ref_name }}/${{ github.workflow }}/Containerfile
+          buildah build \
+          --creds ${{ secrets.USERPASS }} \
+          --omit-history \
+          --squash \
+          -t \
+          docker.io/${{ github.repository_owner }}/${{ github.workflow }}:latest
+          ${{ github.workflow }}
+          buildah push \
+          --compression-format gzip \
+          --compression-level 9 \
+          --creds ${{ secrets.USERPASS }} \
+          --remove-signatures \
+          docker.io/${{ github.repository_owner }}/${{ github.workflow }}:latest
+      # yamllint enable rule:line-length
     timeout-minutes: 1
