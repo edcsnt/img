@@ -112,6 +112,7 @@ RUN <<EOT
     /usr/local/lib/python$VER/pickle.py \
     /usr/local/lib/python$VER/pkgutil.py \
     /usr/local/lib/python$VER/platform.py \
+    /usr/local/lib/python$VER/pprint.py \
     /usr/local/lib/python$VER/py_compile.py \
     /usr/local/lib/python$VER/_pydatetime.py \
     /usr/local/lib/python$VER/_pydecimal.py \
