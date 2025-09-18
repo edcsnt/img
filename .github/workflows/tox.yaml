@@ -23,7 +23,7 @@ jobs:
     steps:
       # TODO(edcsnt): Replace docker-login(1) and docker buildx build
       # with buildah-build(1) and buildah-push(1) once Ubuntu 26.04 LTS
-      # is released.
+      # is released: <https://github.com/containers/buildah/issues/5474>.
       # yamllint disable rule:line-length
       - run: |
           curl -O \
